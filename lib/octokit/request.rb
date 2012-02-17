@@ -41,8 +41,8 @@ module Octokit
 
       if raw
         response
-      elsif auto_traversal && ( next_url = links(response)["next"] ) && links(response)["next"] != path
-        response.body + request(method, next_url, options, version, authenticate, raw, force_urlencoded)
+      elsif auto_traversal && ( next_url = links(response)["next"])
+        response.body + request(method, next_url.gsub(/[&?]sha=.*(&|\z)/, ''), options, version, authenticate, raw, force_urlencoded)
       else
         response.body
       end

@@ -13,8 +13,7 @@ describe Octokit::Client do
   it "should traverse a paginated response if auto_traversal is on" do
     stub_get("https://api.github.com/foo/bar").
       to_return(:status => 200, :body => %q{["stuff"]}, :headers => 
-        { 'Link' => %q{<https://api.github.com/foo/bar?page=2>; rel="next", <https://api.github.com/foo/bar?page=3>; rel="last", <https://api.github.com/foo/bar?page=1>; rel="prev", <https://api.github.com/foo/bar?page=1>; rel="first"} })
-
+        { 'Link' => %q{<https://api.github.com/foo/bar?page=2>; rel="next", <https://api.github.com/foo/bar?page=3>; rel="last"} })
 
     stub_get("https://api.github.com/foo/bar?page=2").
       to_return(:status => 200, :body => %q{["even more stuff"]}, :headers => 
@@ -22,7 +21,7 @@ describe Octokit::Client do
 
     stub_get("https://api.github.com/foo/bar?page=3").
       to_return(:status => 200, :body => %q{["stuffapalooza"]}, :headers => 
-        { 'Link' => %q{<https://api.github.com/foo/bar?page=2>; rel="prev", <https://api.github.com/foo/bar?page=1>; rel="first", <https://api.github.com/foo/bar?page=3>; rel="next", <https://api.github.com/foo/bar?page=3>; rel="last"} })
+        { 'Link' => %q{<https://api.github.com/foo/bar?page=2>; rel="prev", <https://api.github.com/foo/bar?page=1>; rel="first"} })
 
     Octokit::Client.new(:auto_traversal => true).get("https://api.github.com/foo/bar", {}, 3).should == ['stuff', 'even more stuff', 'stuffapalooza']
   end
