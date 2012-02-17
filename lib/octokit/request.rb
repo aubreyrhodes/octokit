@@ -42,6 +42,7 @@ module Octokit
       if raw
         response
       elsif auto_traversal && ( next_url = links(response)["next"])
+        options.delete(:sha)
         response.body + request(method, next_url.gsub(/[&?]sha=.*(&|\z)/, ''), options, version, authenticate, raw, force_urlencoded)
       else
         response.body
